@@ -2,6 +2,14 @@
 name = "twodarray"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+description = "A 2D array library"
+homepage = "https://github.com/martintc/twodarray"
+repository = "https://github.com/martintc/twodarray"
+readme = "README.md"
+authors = ["Todd Martin <warfox@sdf.org>"]
+categories = ["data-structures"]
+exclude = [".github"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
