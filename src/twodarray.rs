@@ -26,15 +26,15 @@ impl<T: Default + std::clone::Clone> Array2D<T> {
         }
     }
 
-    pub fn get_size(self) -> usize {
+    pub fn get_size(&self) -> usize {
         self.data.len() as usize
     }
 
-    pub fn get_height(self) -> usize {
+    pub fn get_height(&self) -> usize {
         self.height
     }
 
-    pub fn get_width(self) -> usize {
+    pub fn get_width(&self) -> usize {
         self.width
     }
 
