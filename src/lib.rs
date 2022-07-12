@@ -1,5 +1,7 @@
 mod twodarray;
 
+pub use crate::twodarray::Array2D;
+
 #[cfg(test)]
 mod tests {
     use crate::twodarray;
