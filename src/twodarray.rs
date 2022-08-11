@@ -15,15 +15,17 @@ impl<T: Default + std::clone::Clone> Array2D<T> {
         }
     }
 
-    pub fn populate_array_with_data(&mut self, data: Vec<T>) {
+    pub fn populate_array_with_data(&mut self, data: Vec<T>) -> Result<(), &str> {
         if data.len() > self.data.len() {
-            panic!("Data to populate array is larger than the array");
+            //panic!("Data to populate array is larger than the array");
+	    return Err("Data to populate array is larger than the array");
         }
         let mut count: usize = 0;
         for i in data.iter() {
             self.data[count] = i.clone();
             count += 1;
         }
+	Ok(())
     }
 
     pub fn get_size(&self) -> usize {
@@ -76,8 +78,20 @@ mod tests {
     fn test_array_populate_with_data() {
         let mut arr = Array2D::<u8>::new(2, 2);
         let data: [u8; 4] = [2; 4];
-        arr.populate_array_with_data(data.to_vec());
-        assert!(true);
+	match arr.populate_array_with_data(data.to_vec()) {
+	    Ok(_) => assert!(true),
+	    Err(_) => assert!(false),
+	}
+    }
+
+    #[test]
+    fn test_array_populate_with_data_error() {
+	let mut array = Array2D::<u8>::new(2, 2);
+	let data: [u8; 5] = [2; 5];
+	match array.populate_array_with_data(data.to_vec()) {
+	    Ok(_) => assert!(false),
+	    Err(_) => assert!(true),
+	}
     }
 
     #[test]
@@ -96,7 +110,10 @@ mod tests {
     fn test_get_value_at() {
         let test_data = vec![1, 2, 3, 4];
         let mut arr = Array2D::<u8>::new(2, 2);
-        arr.populate_array_with_data(test_data);
+        match arr.populate_array_with_data(test_data) {
+	    Ok(_) => assert!(true),
+	    Err(_) => assert!(false),
+	}
         let mut result = arr.get_value_at(0, 0);
         assert_eq!(result, 1);
         result = arr.get_value_at(0, 1);
