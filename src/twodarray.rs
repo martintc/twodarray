@@ -40,12 +40,21 @@ impl<T: Default + std::clone::Clone> Array2D<T> {
         self.width
     }
 
-    pub fn get_value_at(&self, row: usize, column: usize) -> T
+    pub fn get_value_at(&self, row: usize, column: usize) -> Result<T, &str>
     where
         T: Copy,
     {
+	if row < 0 || column < 0 {
+	    return Err("Can not return data from a row or column index less than 0");
+	}
+	if row > self.height {
+	    return Err("Invalid row for data access");
+	}
+	if column > self.width {
+	    return Err("Invalid column for data access");
+	}
         let index: usize = self.get_index(row, column);
-        self.data[index]
+        Ok(self.data[index])
     }
 
     pub fn set_value_at(&mut self, row: usize, column: usize, data: T) {
@@ -109,26 +118,41 @@ mod tests {
     #[test]
     fn test_get_value_at() {
         let test_data = vec![1, 2, 3, 4];
-        let mut arr = Array2D::<u8>::new(2, 2);
+        let mut arr = Array2D::<i8>::new(2, 2);
         match arr.populate_array_with_data(test_data) {
 	    Ok(_) => assert!(true),
 	    Err(_) => assert!(false),
 	}
-        let mut result = arr.get_value_at(0, 0);
+        let mut result: i8 = match arr.get_value_at(0, 0) {
+	    Ok(r) => r,
+	    Err(_) => -1,
+	};
         assert_eq!(result, 1);
-        result = arr.get_value_at(0, 1);
+        result = match arr.get_value_at(0, 1) {
+	    Ok(r) => r,
+	    Err(_) => -1,
+	};
         assert_eq!(result, 2);
-        result = arr.get_value_at(1, 0);
+        result = match arr.get_value_at(1, 0) {
+	    Ok(r) => r,
+	    Err(_) => -1,
+	};
         assert_eq!(result, 3);
-        result = arr.get_value_at(1, 1);
+        result = match arr.get_value_at(1, 1) {
+	    Ok(r) => r,
+	    Err(_) => -1,
+	};
         assert_eq!(result, 4);
     }
 
     #[test]
     fn test_set_value_at() {
-        let mut arr = Array2D::<u8>::new(4, 5);
+        let mut arr = Array2D::<i8>::new(4, 5);
         arr.set_value_at(2, 3, 5);
-        let result = arr.get_value_at(2, 3);
+        let result = match arr.get_value_at(2, 3) {
+	    Ok(r) => r,
+	    Err(_) => -1,
+	};
         assert_eq!(result, 5);
     }
 }
