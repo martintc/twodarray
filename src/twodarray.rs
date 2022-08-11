@@ -7,11 +7,18 @@ pub struct Array2D<T> {
 
 impl<T: Default + std::clone::Clone> Array2D<T> {
     pub fn new(width: usize, height: usize) -> Self {
+	if width < 1 || height < 1 {
+	    return Array2D {
+		data: vec![],
+		width: 0,
+		height: 0,
+	    }
+	}
         let size = (width * height) as usize;
         Array2D {
             data: vec![Default::default(); size],
-            width: width,
-            height: height,
+            width,
+            height,
         }
     }
 
@@ -20,11 +27,9 @@ impl<T: Default + std::clone::Clone> Array2D<T> {
             //panic!("Data to populate array is larger than the array");
 	    return Err("Data to populate array is larger than the array");
         }
-        let mut count: usize = 0;
-        for i in data.iter() {
-            self.data[count] = i.clone();
-            count += 1;
-        }
+	for (pos, e) in data.iter().enumerate() {
+	    self.data[pos] = e.clone();
+	}
 	Ok(())
     }
 
@@ -44,9 +49,6 @@ impl<T: Default + std::clone::Clone> Array2D<T> {
     where
         T: Copy,
     {
-	if row < 0 || column < 0 {
-	    return Err("Can not return data from a row or column index less than 0");
-	}
 	if row > self.height {
 	    return Err("Invalid row for data access");
 	}
